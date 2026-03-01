@@ -10,11 +10,10 @@ const Navbar = () => {
 
     const navLinks = [
         { name: 'Home', href: '/' },
-        ...(user ? [
-            { name: 'Student List', href: '/students' },
-            { name: 'Courses', href: '/courses' },
-            { name: 'About Us', href: '/about' },
-        ] : []),
+
+        { name: 'Student List', href: '/students' },
+        { name: 'Courses', href: '/courses' },
+        { name: 'About Us', href: '/about' },
         { name: 'Contact', href: '/contact' },
     ];
 
