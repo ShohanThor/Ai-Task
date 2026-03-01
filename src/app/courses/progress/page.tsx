@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState, use } from 'react';
+import React, { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useCourses } from '@/context/CourseContext';
 import { useStudents } from '@/context/StudentContext';
 import { Student, StudentProgress } from '@/lib/types';
 import Link from 'next/link';
 
-const ProgressPage = () => {
+const ProgressPageContent = () => {
     const searchParams = useSearchParams();
     const courseId = searchParams.get('courseId');
     const { getCourseById, progress, addProgress, updateProgress } = useCourses();
@@ -33,7 +33,6 @@ const ProgressPage = () => {
     }
 
     // Filter students who are enrolled in this course (by name or some other field)
-    // For this SMS, let's assume students in the course list matching the course name or just show all for management
     const courseStudents = students.filter(s => s.course === course.name);
 
     const getProgressForStudent = (studentId: string) => {
@@ -158,9 +157,9 @@ const ProgressPage = () => {
                                                         />
                                                     ) : (
                                                         <span className={`px-3 py-1 rounded-lg text-xs font-bold ${!prog?.grade ? 'bg-gray-100 text-gray-400' :
-                                                                prog.grade.startsWith('A') ? 'bg-green-100 text-green-700' :
-                                                                    prog.grade.startsWith('B') ? 'bg-blue-100 text-blue-700' :
-                                                                        prog.grade.startsWith('C') ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'
+                                                            prog.grade.startsWith('A') ? 'bg-green-100 text-green-700' :
+                                                                prog.grade.startsWith('B') ? 'bg-blue-100 text-blue-700' :
+                                                                    prog.grade.startsWith('C') ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'
                                                             }`}>
                                                             {prog?.grade || 'N/A'}
                                                         </span>
@@ -222,6 +221,19 @@ const ProgressPage = () => {
                 </div>
             </div>
         </div>
+    );
+};
+
+const ProgressPage = () => {
+    return (
+        <Suspense fallback={
+            <div className="py-20 text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mx-auto mb-4"></div>
+                <p className="text-gray-500 font-medium">Loading progress data...</p>
+            </div>
+        }>
+            <ProgressPageContent />
+        </Suspense>
     );
 };
 
