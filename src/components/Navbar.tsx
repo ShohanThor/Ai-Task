@@ -12,8 +12,9 @@ const Navbar = () => {
         { name: 'Home', href: '/' },
         ...(user ? [
             { name: 'Student List', href: '/students' },
+            { name: 'Courses', href: '/courses' },
+            { name: 'About Us', href: '/about' },
         ] : []),
-        { name: 'About Us', href: '/about' },
         { name: 'Contact', href: '/contact' },
     ];
 

@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 const Footer = () => {
     return (
         <footer className="bg-primary text-white py-8">
@@ -6,8 +8,12 @@ const Footer = () => {
                     &copy; {new Date().getFullYear()} Student Management System. All rights reserved.
                 </p>
                 <div className="flex justify-center space-x-6">
-                    <span className="hover:underline cursor-pointer font-medium">Privacy Policy</span>
-                    <span className="hover:underline cursor-pointer font-medium">Terms of Service</span>
+                    <Link href="/privacy" className="hover:underline cursor-pointer font-medium hover:opacity-100 opacity-80 transition-opacity">
+                        Privacy Policy
+                    </Link>
+                    <Link href="/terms" className="hover:underline cursor-pointer font-medium hover:opacity-100 opacity-80 transition-opacity">
+                        Terms of Service
+                    </Link>
                 </div>
             </div>
         </footer>

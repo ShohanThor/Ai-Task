@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { StudentProvider } from "@/context/StudentContext";
 import { AuthProvider } from "@/context/AuthContext";
+import { CourseProvider } from "@/context/CourseContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -33,15 +34,16 @@ export default function RootLayout({
       >
         <AuthProvider>
           <StudentProvider>
-            <Navbar />
-            <main className="flex-grow">
-              {children}
-            </main>
-            <Footer />
+            <CourseProvider>
+              <Navbar />
+              <main className="flex-grow">
+                {children}
+              </main>
+              <Footer />
+            </CourseProvider>
           </StudentProvider>
         </AuthProvider>
       </body>
-
     </html>
   );
 }

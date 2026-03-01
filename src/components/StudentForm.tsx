@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Student } from '@/lib/types';
+import { useCourses } from '@/context/CourseContext';
 
 interface StudentFormProps {
     initialData?: Student;
@@ -10,6 +11,7 @@ interface StudentFormProps {
 }
 
 const StudentForm: React.FC<StudentFormProps> = ({ initialData, onSubmit, title }) => {
+    const { courses } = useCourses();
     const [formData, setFormData] = useState<Omit<Student, 'id'>>({
         name: '',
         email: '',
@@ -112,11 +114,19 @@ const StudentForm: React.FC<StudentFormProps> = ({ initialData, onSubmit, title 
                         onChange={handleChange}
                     >
                         <option value="">Select a Course</option>
-                        <option value="Computer Science">Computer Science</option>
-                        <option value="Information Technology">Information Technology</option>
-                        <option value="Business Administration">Business Administration</option>
-                        <option value="Electrical Engineering">Electrical Engineering</option>
-                        <option value="Mathematics">Mathematics</option>
+                        {courses.map(course => (
+                            <option key={course.id} value={course.name}>{course.name}</option>
+                        ))}
+                        {/* Fallback to original defaults if no courses exist yet */}
+                        {courses.length === 0 && (
+                            <>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Information Technology">Information Technology</option>
+                                <option value="Business Administration">Business Administration</option>
+                                <option value="Electrical Engineering">Electrical Engineering</option>
+                                <option value="Mathematics">Mathematics</option>
+                            </>
+                        )}
                     </select>
                 </div>
                 <div className="pt-4">
