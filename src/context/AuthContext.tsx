@@ -17,13 +17,46 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setIsLoading(false);
     }, []);
 
-    const login = (email: string) => {
-        const userData = { email };
-        setUser(userData);
-        localStorage.setItem('user', JSON.stringify(userData));
-        // Set a cookie for middleware
-        document.cookie = `auth_token=true; path=/; max-age=${60 * 60 * 24 * 7}`; // 1 week
-        document.cookie = `user_email=${email}; path=/; max-age=${60 * 60 * 24 * 7}`;
+    const signup = async (name: string, email: string, password: string): Promise<{ success: boolean; message: string }> => {
+        const usersJson = localStorage.getItem('users');
+        const users: User[] = usersJson ? JSON.parse(usersJson) : [];
+
+        if (users.find(u => u.email === email)) {
+            return { success: false, message: 'Email already exists' };
+        }
+
+        const newUser: User = { name, email, password };
+        users.push(newUser);
+        localStorage.setItem('users', JSON.stringify(users));
+
+        return { success: true, message: 'Registration successful' };
+    };
+
+    const login = async (email: string, password?: string): Promise<{ success: boolean; message: string }> => {
+        // Hardcoded admin check
+        if (email === 'admin@gmail.com' && password === 'admin123') {
+            const userData = { email, name: 'Admin' };
+            setUser(userData);
+            localStorage.setItem('user', JSON.stringify(userData));
+            document.cookie = `auth_token=true; path=/; max-age=${60 * 60 * 24 * 7}`;
+            document.cookie = `user_email=${email}; path=/; max-age=${60 * 60 * 24 * 7}`;
+            return { success: true, message: 'Login successful' };
+        }
+
+        const usersJson = localStorage.getItem('users');
+        const users: User[] = usersJson ? JSON.parse(usersJson) : [];
+        const userFound = users.find(u => u.email === email && u.password === password);
+
+        if (userFound) {
+            const { password: _, ...userData } = userFound;
+            setUser(userData);
+            localStorage.setItem('user', JSON.stringify(userData));
+            document.cookie = `auth_token=true; path=/; max-age=${60 * 60 * 24 * 7}`;
+            document.cookie = `user_email=${email}; path=/; max-age=${60 * 60 * 24 * 7}`;
+            return { success: true, message: 'Login successful' };
+        }
+
+        return { success: false, message: 'Invalid email or password' };
     };
 
     const logout = () => {
@@ -36,7 +69,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, isLoading }}>
+        <AuthContext.Provider value={{ user, login, logout, signup, isLoading }}>
             {children}
         </AuthContext.Provider>
     );

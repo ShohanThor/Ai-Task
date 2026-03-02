@@ -34,7 +34,9 @@ export interface StudentProgress {
 }
 
 export interface User {
+  name?: string;
   email: string;
+  password?: string;
 }
 
 export interface StudentContextType {
@@ -60,7 +62,8 @@ export interface CourseContextType {
 
 export interface AuthContextType {
   user: User | null;
-  login: (email: string) => void;
+  login: (email: string, password?: string) => Promise<{ success: boolean; message: string }>;
+  signup: (name: string, email: string, password: string) => Promise<{ success: boolean; message: string }>;
   logout: () => void;
   isLoading: boolean;
 }

@@ -50,12 +50,20 @@ const Navbar = () => {
                             </button>
                         </div>
                     ) : (
-                        <Link
-                            href="/login"
-                            className="bg-white text-primary px-4 py-1 rounded-full font-semibold hover:bg-opacity-90 transition-all ml-4"
-                        >
-                            Login
-                        </Link>
+                        <div className="flex items-center gap-2 ml-4">
+                            <Link
+                                href="/login"
+                                className="bg-white text-primary px-4 py-1 rounded-full font-semibold hover:bg-opacity-90 transition-all"
+                            >
+                                Login
+                            </Link>
+                            <Link
+                                href="/signup"
+                                className="bg-primary-foreground text-primary px-4 py-1 rounded-full font-semibold border border-white hover:bg-white hover:text-primary transition-all"
+                            >
+                                Sign Up
+                            </Link>
+                        </div>
                     )}
                 </div>
             </div>
